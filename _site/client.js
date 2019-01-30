@@ -4,14 +4,14 @@ let logOutput;
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    let wsServer = initServer();
+    let wsClient = initClient();
 
     const tbxMsg = document.getElementById("tbxMsg");
     const cmdSend = document.getElementById("cmdSend");
     logOutput = document.getElementById('logOutput');
 
     cmdSend.addEventListener('click', () => {
-        wsServer.send(tbxMsg.value);
+        wsClient.send(tbxMsg.value);
     });
 
 });
@@ -23,23 +23,23 @@ const log = msg => {
     logOutput.innerHTML += `<br/>${padLeft(now.getHours())}:${padLeft(now.getMinutes())}:${padLeft(now.getSeconds())} ${msg}`
 }
 
-const initServer = () => {
+const initClient = () => {
     
-    const wsServer = new WebSocket('ws://localhost:1337');
+    const wsClient = new WebSocket('ws://localhost:1337');
 
-    wsServer.onopen = function () {
+    wsClient.onopen = function () {
         // connection is opened and ready to use
         log('on open');
     };
 
-    wsServer.onerror = function (error) {
+    wsClient.onerror = function (error) {
         // an error occurred when sending/receiving data
         log('on error');
     };
     
-    wsServer.onmessage = function (message) {
+    wsClient.onmessage = function (message) {
         log('received message: ' + message.data);
     };
 
-    return(wsServer);
+    return(wsClient);
 }
