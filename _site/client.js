@@ -13,6 +13,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
+const log = msg => {
+    const now = new Date();
+    const padLeft = value => value<10 ? "0"+value : value;
+
+    console.log(`${padLeft(now.getHours())}:${padLeft(now.getMinutes())}:${padLeft(now.getSeconds())} ${msg}`);
+}
 
 const initServer = () => {
     
@@ -20,23 +26,16 @@ const initServer = () => {
 
     wsServer.onopen = function () {
         // connection is opened and ready to use
-        console.log('on open');
+        log('on open');
     };
 
     wsServer.onerror = function (error) {
         // an error occurred when sending/receiving data
-        console.log('on error');
+        log('on error');
     };
     
     wsServer.onmessage = function (message) {
-        console.log('on message');
-        console.dir(message);
- //       try {
- //           var json = JSON.parse(message.data);
- //       } catch (e) {
- //           console.log('This doesn\'t look like a valid JSON: ', message.data);
- //           return;
- //       }
+        log('received message: ' + message.data);
     };
 
     return(wsServer);

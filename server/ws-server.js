@@ -6,6 +6,8 @@ const log = require('./logger');
 
 const port = 1337;
 
+const openConnections = [];
+
 module.exports = function WsServer() {
 
     const httpServer = http.createServer(function(request, response) {
@@ -29,22 +31,35 @@ module.exports = function WsServer() {
         log('ws: new connection established');
     
         var connection = request.accept(null, request.origin);
+
+        openConnections.push(connection);
     
         // This is the most important callback for us, we'll handle
         // all messages from users here.
         connection.on('message', function(message) {
     
             log('ws: new message received');
-            console.dir(message);
     
             if (message.type === 'utf8') {
                 // process WebSocket message
-                connection.sendUTF( JSON.stringify({ type: 'history', data: "BLAH blah"}) );
+                // connection.sendUTF( JSON.stringify({ type: 'history', data: "BLAH blah"}) );
+
+                // broadcast message to all the clients except the one who sent the message
+                openConnections.forEach(function(destination) {
+                    if(destination !== connection) {
+                        destination.sendUTF(message.utf8Data);
+                    }
+                });
             }
         });
     
         connection.on('close', function(connection) {
             // close user connection
+
+            // remove connection from the list
+            const ix = openConnections.indexOf(connection);
+            openConnections.splice(ix, 1);
+
             log('ws: connection closed');
         });
     });
