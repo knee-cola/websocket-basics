@@ -7,6 +7,8 @@ In this example a web client connects to the WebSocket broadcasting server.
 Each message the WebSocket server receives from a client is sent sent to all other connected (the client which sent the message does not receive it).
 
 # How to run it
-Open a bash terminal and run `npm start` (make sure to install all the dependecnies by running `npm i`)
+First make sure to install all the dependencies by running `npm i`
 
-In your browser visit address http://localhost:8080
+Then just run `npm start` ()
+
+In your web browser visit address http://localhost:1337
