@@ -30,7 +30,6 @@ const initServer = () => {
     
     wsServer.onmessage = function (message) {
         console.log('on message');
-
         console.dir(message);
  //       try {
  //           var json = JSON.parse(message.data);
