@@ -1,5 +1,4 @@
 // https://adrianmejia.com/blog/2016/08/24/building-a-node-js-static-file-server-files-over-http-using-es6/#HTTP-Web-Servers
-const http = require('http');
 const url = require('url');
 const fs = require('fs');
 const path = require('path');
@@ -26,12 +25,10 @@ const mimeType = {
   '.ttf': 'aplication/font-sfnt'
 };
 
-module.exports = function HtmlServer() {
+const rootPath = path.resolve(__dirname, '../_site/');
 
-  const rootPath = path.resolve(__dirname, '../_site/');
-
-  http.createServer(function (req, res) {
-    log(`html: ${req.method} ${req.url}`);
+module.exports = function serveFiles(req, res) {
+    log(`http: ${req.method} ${req.url}`);
   
     // parse URL
     const parsedUrl = url.parse(req.url);
@@ -70,11 +67,5 @@ module.exports = function HtmlServer() {
           res.end(data);
         }
       });
-    });
-  
-  
-  }).listen(parseInt(port), () => {
-    log(`html: html server listening on http://localhost:${port}/`)
-  });
-  
+    }); 
 };
